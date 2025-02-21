@@ -1,0 +1,43 @@
+#неверно введенный логин
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class NegativeLoginTest1 {
+
+    public static void main(String[] args) {
+        // 1. Настройка ChromeDriver (ЗАМЕНИТЬ ПУТЬ!!!)
+        System.setProperty("webdriver.chrome.driver", "/путь/к/chromedriver");
+
+        // 2. Создание экземпляра ChromeDriver
+        WebDriver driver = new ChromeDriver();
+
+        // 3. Открываем страницу логина
+        driver.get("https://www.saucedemo.com/");
+
+        // 4. Вводим неверный логин и пароль
+        WebElement usernameField = driver.findElement(By.id("user-name"));
+        usernameField.sendKeys("wrong_username");
+
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("secret_sauce");
+
+        // 5. Нажимаем кнопку Login
+        driver.findElement(By.id("login-button")).click();
+
+        // 6. Проверяем, появилось ли сообщение об ошибке
+        WebElement errorElement = driver.findElement(By.xpath("//h3[@data-test='error']"));
+        String errorMessage = errorElement.getText();
+
+        // 7. Проверяем, содержит ли сообщение об ошибке ожидаемый текст
+        if (errorMessage.contains("Username and password do not match")) {
+            System.out.println("Тест пройден: Сообщение об ошибке отображается.");
+        } else {
+            System.out.println("Тест провален: Сообщение об ошибке не отображается или текст не совпадает.");
+        }
+
+        // 8. Закрываем браузер
+        driver.quit();
+    }
+}
